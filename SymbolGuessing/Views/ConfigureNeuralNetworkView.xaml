@@ -1,0 +1,129 @@
+﻿<UserControl x:Class="SymbolGuessing.Views.ConfigureNeuralNetworkView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SymbolGuessing.Views"
+             xmlns:converters ="clr-namespace:SymbolGuessing.Converters"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="20"></Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Left"></Setter>
+            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"></BooleanToVisibilityConverter>
+        <converters:StringToDoubleConverter x:Key="StrToDouble"/>
+        <converters:StringToIntConverter x:Key="StrToInt"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <Label x:Name="lblRepPoints" Grid.Row="1" Grid.Column="1">Number of Representative Points (Input layer):</Label>
+        <TextBox x:Name="txtRepPoints" Grid.Row="1" Grid.Column="2"
+                 Text="{Binding NumOfRepresentativePoints,
+                        Mode=TwoWay,
+                        Converter={StaticResource StrToInt}}"></TextBox>
+
+        <Label x:Name="lblHiddenLayer" Grid.Row="2" Grid.Column="1">Hidden Layer Configuration:</Label>
+        <TextBox x:Name="txtHiddenLayer" Grid.Row="2" Grid.Column="2"
+                 Text="{Binding HiddenLayerConfiguration, 
+            Mode=TwoWay}"></TextBox>
+
+        <Label x:Name="lblIterations" Grid.Row="3" Grid.Column="1">Iterations:</Label>
+        <TextBox x:Name="txtItearations" Grid.Row="3" Grid.Column="2"
+                 Text="{Binding Iterations, 
+            Mode=TwoWay,
+            Converter={StaticResource StrToInt}}"></TextBox>
+
+        <Label x:Name="lblAlgorithm" Grid.Row="4" Grid.Column="1">Algorithm Type:</Label>
+        <ComboBox x:Name="coboAlgorithm" Grid.Row="4" Grid.Column="2"
+                  FontSize="20"
+                  HorizontalContentAlignment="Left"
+                  VerticalContentAlignment="Center"
+                 ItemsSource="{Binding Algorithms}"
+                 SelectedItem="{Binding SelectedAlgorithm, Mode=TwoWay}"></ComboBox>
+
+        <Label x:Name="lblMiniBatchSize" Grid.Row="5" Grid.Column="1"
+               Visibility="{Binding MiniBatchSizeVisibility,
+                Mode=OneWay, 
+                Converter={StaticResource BoolToVis},
+                UpdateSourceTrigger=PropertyChanged}">MiniBatch Size:</Label>
+        <TextBox x:Name="txtMiniBatchSize" Grid.Row="5" Grid.Column="2"
+                 Text="{Binding MiniBatchSize, Mode=TwoWay,
+            Converter={StaticResource StrToInt}}"
+                 Visibility="{Binding MiniBatchSizeVisibility,
+                    Mode=OneWay, 
+                    Converter={StaticResource BoolToVis}, 
+                    UpdateSourceTrigger=PropertyChanged}"></TextBox>
+
+        <Label x:Name="lblPrecision" Grid.Row="6" Grid.Column="1">Precision:</Label>
+        <TextBox x:Name="txtPrecision" Grid.Row="6" Grid.Column="2"
+                 Text="{Binding Precision, Mode=TwoWay, 
+            Converter={StaticResource StrToDouble}}"></TextBox>
+
+        <Label x:Name="lblLearningRate" Grid.Row="7" Grid.Column="1">Learning Rate:</Label>
+        <TextBox x:Name="txtLearningRate" Grid.Row="7" Grid.Column="2"
+                 Text="{Binding LearningRate, Mode=TwoWay,
+            Converter={StaticResource StrToDouble}}"></TextBox>
+
+        <Button x:Name="btnConfigure" Grid.Row="8" Grid.Column="2" 
+                FontSize="20"
+                Content="Configure"
+                Command="{Binding ConfigureNeuralNetwork}"/>
+
+        <Label x:Name="lblIterAfter" Grid.Row="9" Grid.Column="1"
+               Visibility="{Binding IsConfigured, Mode=OneWay, 
+            Converter={StaticResource BoolToVis}, UpdateSourceTrigger=PropertyChanged}"
+               Content="Performed Iterations:"/>
+        <TextBlock x:Name="txtbIterAfter" Grid.Row="9" Grid.Column="2"
+                   Visibility="{Binding IsConfigured, Mode=OneWay ,
+            Converter={StaticResource BoolToVis}, UpdateSourceTrigger=PropertyChanged}"
+                   Text="{Binding FinalIteration, Mode=OneWay, 
+            Converter={StaticResource StrToInt}, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <Label x:Name="lblFinalError" Grid.Row="10" Grid.Column="1"
+               Content="Final Error:"
+               Visibility="{Binding IsConfigured, Mode=OneWay, 
+            Converter={StaticResource BoolToVis}, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock x:Name="txtbFinalError" Grid.Row="10" Grid.Column="2"
+                   Visibility="{Binding IsConfigured, Mode=OneWay, 
+            Converter={StaticResource BoolToVis}, UpdateSourceTrigger=PropertyChanged}"
+                   Text="{Binding TotalError, Mode=OneWay, 
+            Converter={StaticResource StrToDouble}, UpdateSourceTrigger=PropertyChanged}"/>
+            
+    </Grid>
+</UserControl>

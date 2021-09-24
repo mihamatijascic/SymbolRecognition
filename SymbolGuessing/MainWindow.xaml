@@ -1,0 +1,33 @@
+﻿<Window x:Class="SymbolGuessing.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SymbolGuessing"
+        xmlns:control ="clr-namespace:SymbolGuessing.Views"
+        mc:Ignorable="d"
+        Title="Symbol Guessing" Height="700" Width="1100">
+
+    <Window.Resources>
+        <Style TargetType="TabItem">
+            <Setter Property="FontSize" Value="18"></Setter>
+        </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"></BooleanToVisibilityConverter>
+    </Window.Resources>
+    
+    <Grid>
+        <TabControl>
+            <TabItem x:Name="tabInputGesture" Header="Add Gesture">
+                <control:InputSymbolView></control:InputSymbolView>
+            </TabItem>
+            <TabItem x:Name="tabConfigNeuralNet" Header="Configure Neural Network"
+                     Visibility="{Binding ConfigureNetworkVisibility, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVis}}">
+                <control:ConfigureNeuralNetworkView></control:ConfigureNeuralNetworkView>
+            </TabItem>
+            <TabItem x:Name="tabPredictGesture" Header="Predict Gesture"
+                     Visibility="{Binding PredictGestureVisibility, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVis}}">
+                <control:PredictGestureView></control:PredictGestureView>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
