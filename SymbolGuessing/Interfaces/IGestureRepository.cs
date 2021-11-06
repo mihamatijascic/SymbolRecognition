@@ -14,14 +14,14 @@ namespace SymbolGuessing.Interfaces
         public delegate void RepositoryChanged();
         public event RepositoryChanged RepositoryChangeEvent;
 
-        public void CreateGesture(string gestureName);
-        public void RemoveGesture(string gestureName);
+        public bool CreateGesture(string gestureName);
+        public bool RemoveGesture(string gestureName);
         public bool GestureExists(string gestureName);
         public int GesturePatternCount(string gestureName);
         public int GestureCount();
         public int AllPatternCount();
-        public void AddPattern(string gestureName, List<Point> patternPoints);
-        public void DeleteLastPattern(string gestureName);
+        public bool AddPattern(string gestureName, List<Point> patternPoints);
+        public bool DeleteLastPattern(string gestureName);
         public List<Gesture> GetGestures();
         public void RemoveAllGestures();
         public ObservableCollection<Gesture> GetObservableGestures();

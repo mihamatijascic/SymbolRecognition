@@ -20,17 +20,18 @@ namespace SymbolGuessing.Model
             Directory.CreateDirectory(CurrentGesturesDirectory);
         }
 
-        public void CreateGesture(string gestureName)
+        public bool CreateGesture(string gestureName)
         {
             string gesturePath = CreateGesturePath(gestureName);
-            if (File.Exists(gesturePath)) return;
+            if (File.Exists(gesturePath)) return true;
             else File.Create(gesturePath).Close();
             OnRepositoryChanged();
+            return true;
         }
 
-        public void RemoveGesture(string gestureName)
+        public bool RemoveGesture(string gestureName)
         {
-            if(!GestureExists(gestureName)) return;
+            if(!GestureExists(gestureName)) return true;
             string filePath = $@"{CurrentGesturesDirectory}\{gestureName}.txt";
             try
             {
@@ -39,8 +40,9 @@ namespace SymbolGuessing.Model
             }
             catch (IOException e)
             {
-
+                return false;
             }
+            return true;
         }
 
         public bool GestureExists(string gestureName)
@@ -72,7 +74,7 @@ namespace SymbolGuessing.Model
             return count;
         }
 
-        public void AddPattern(string gestureName, List<Point> patternPoints)
+        public bool AddPattern(string gestureName, List<Point> patternPoints)
         {
             StringBuilder patternBuilder = new StringBuilder();
             foreach (var patternPoint in patternPoints)
@@ -80,6 +82,7 @@ namespace SymbolGuessing.Model
                 patternBuilder.Append(patternPoint.ToString()).Append("|");
             }
 
+            //removes last "|"
             patternBuilder.Remove(patternBuilder.Length - 1, 1);
             patternBuilder.Append(Environment.NewLine);
 
@@ -90,15 +93,27 @@ namespace SymbolGuessing.Model
             }
             catch (IOException e)
             {
-
+                return false;
             }
+
+            return true;
         }
 
-        public void DeleteLastPattern(string gestureName)
+        public bool DeleteLastPattern(string gestureName)
         {
             List<string> lines = File.ReadAllLines(CreateGesturePath(gestureName)).ToList();
-            if(lines.Count == 0) return;
-            File.WriteAllLines(CreateGesturePath(gestureName), lines.GetRange(0, lines.Count-1).ToArray());
+            if (lines.Count == 0) return true;
+
+            try
+            {
+                File.WriteAllLines(CreateGesturePath(gestureName), lines.GetRange(0, lines.Count - 1).ToArray());
+            }
+            catch (IOException e)
+            {
+                
+            }
+
+            return true;
         }
 
         public List<Gesture> GetGestures()
