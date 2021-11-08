@@ -52,9 +52,7 @@ namespace SymbolGuessing.ViewModels
 
         public void ConfigureNetworkVisibilityChanged()
         {
-            if (GestureRepository.AllPatternCount() > 0)
-                ConfigureNetworkVisibility = true;
-            else ConfigureNetworkVisibility = false;
+            ConfigureNetworkVisibility = GestureRepository.AllPatternCount() > 0;
         }
 
         public void PredictGestureVisibilityChanged()
