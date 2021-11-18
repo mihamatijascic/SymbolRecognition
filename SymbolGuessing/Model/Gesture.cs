@@ -44,6 +44,11 @@ namespace SymbolGuessing.Model
             return false;
         }
 
+        public override int GetHashCode()
+        {
+            return _name.GetHashCode() * 17 + _numberOfPatterns.GetHashCode();
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
